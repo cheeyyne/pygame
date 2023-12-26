@@ -11,32 +11,36 @@ def main():
     OSKI_Y = 500
     X_OFFSET = 20
     Y_OFFSET = 30
+    WINDOW_SIZE = (800, 800)
     # initialize the pygame module
     pygame.init()
+    pygame.font.init()
     print("maybe \n")
     # OSKI IS 750x500
-    logo = pygame.image.load("oski.png")
-    pygame.display.set_icon(logo)
+    pic = pygame.image.load("data/imgs/bK.png")
     pygame.display.set_caption("minimal program")
     # create a surface on screen that has the size of 240 x 180
-    screen = pygame.display.set_mode((800,800))
-    board  = Board(800, 800)
+    screen = pygame.display.set_mode(WINDOW_SIZE)
+    board  = Board(800, 800, screen)
     board.blitBoard(screen)
     pygame.display.flip()
     # define a variable to control the main loop
     running = True
-     
+    clicked = False
     # main loop
     while running:
         # event handling, gets all event from the event queue
         x = pygame.mouse.get_pos()[0]
         y = pygame.mouse.get_pos()[1]
-        if (in_range(x, X_OFFSET, X_OFFSET + OSKI_X) & in_range(y, Y_OFFSET, Y_OFFSET + OSKI_Y)):
-            screen.blit(logo, (X_OFFSET + 100, Y_OFFSET + 100))
-        else: 
-            screen.blit(logo, (X_OFFSET, Y_OFFSET))
+        x_tile = x // 100
+        y_tile = y // 100
+        image = pygame.image.load("data/imgs/point.png")
+        screen.blit(image, (10, 10))
         pygame.display.flip()
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print("Called handle") 
+                board.handleClick(x_tile, y_tile)
             # only do something if the event is of type QUIT
             if event.type == pygame.QUIT:
                 # change the value to False, to exit the main loop
